@@ -1,0 +1,28 @@
+#linkedin-comment-counter {
+  position: fixed;
+  top: 60px;
+  right: 22px;
+  z-index: 999999;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: #0a66c2;
+  color: white;
+  padding: 12px 18px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.35;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  user-select: none;
+}
+
+.counter-card-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+
+#linkedin-comment-counter div {
+  white-space: nowrap;
+}
