@@ -114,15 +114,27 @@ function findNearbyTextInput(control) {
 }
 
 function hasCommentSubmitComponentKey(control) {
-  // LinkedIn's current build stamps the real "post comment" button with a
-  // componentkey containing "commentButtonSection" (e.g.
-  // "...-commentButtonSectionzKIZ...FEED_RELEVANCE"). The toolbar toggle
-  // button's componentkey doesn't contain this. Class names are fully
-  // obfuscated and rotate, but this componentkey substring has proven to be
-  // a stable, purpose-specific marker, so treat it as a strong positive
-  // signal rather than requiring DOM-proximity heuristics alone.
-  const componentKey = normalizeText(control.getAttribute("componentkey"));
-  return /commentbuttonsection/.test(componentKey);
+  // LinkedIn's current build stamps the real "post comment" button's
+  // *wrapper* element with a componentkey/id containing
+  // "commentButtonSection" (e.g.
+  // "...-commentButtonSectionzKIZ...FEED_RELEVANCE"). The button itself
+  // usually carries only a random componentkey UUID, so this marker has to
+  // be looked for on nearby ancestors too, not just the button. The toolbar
+  // toggle button (and its ancestors) never carry this marker. Class names
+  // are fully obfuscated and rotate, but this componentkey/id substring has
+  // proven to be a stable, purpose-specific marker, so treat it as a strong
+  // positive signal rather than requiring DOM-proximity heuristics alone.
+  let node = control;
+
+  for (let i = 0; i < 4 && node; i += 1) {
+    const componentKey = normalizeText(node.getAttribute("componentkey"));
+    const id = normalizeText(node.id);
+    if (/commentbuttonsection/.test(componentKey + " " + id)) return true;
+
+    node = node.parentElement;
+  }
+
+  return false;
 }
 
 function isCommentSubmitButton(control) {
